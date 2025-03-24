@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Foro {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  descripcion String?
+  creadoEn    DateTime @default(now())
+  temas       Tema[]
+}
+
+model Tema {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  foroId    Int
+  usuarioId Int
+  creadoEn  DateTime @default(now())
+  posts     Post[]
+  foro      Foro     @relation(fields: [foroId], references: [id])
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+}
+
+model Post {
+  id          Int          @id @default(autoincrement())
+  usuarioId   Int
+  imagen      String?
+  texto       String
+  creadoEn    DateTime     @default(now())
+  temaId      Int
+  comentarios Comentario[]
+  likes       Like[]
+  tema        Tema         @relation(fields: [temaId], references: [id])
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
+}
+
+model Comentario {
+  id        Int     @id @default(autoincrement())
+  postId    Int
+  usuarioId Int
+  texto     String
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+}
+
+model Usuario {
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  email       String        @unique
+  password    String
+  rol         String        @default("usuario")
+  comentarios Comentario[]
+  Eliminacion Eliminacion[]
+  Like        Like[]
+  posts       Post[]
+  temas       Tema[]
+}
+
+model Eliminacion {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  tipo      String
+  entidadId Int
+  motivo    String?
+  fecha     DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+}
+
+model Like {
+  id        Int     @id @default(autoincrement())
+  postId    Int
+  usuarioId Int
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, usuarioId])
+}
