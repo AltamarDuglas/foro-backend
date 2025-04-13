@@ -17,6 +17,13 @@ export class ForoService {
       },
     });
   }
+  eliminarForo(foroId: number) {
+    return this.prisma.foro.delete({
+      where: { id: foroId },
+    });
+  }
+  
+  
 
   getPosts() {
     return this.prisma.post.findMany({
