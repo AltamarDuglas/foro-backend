@@ -16,15 +16,18 @@ model Foro {
 }
 
 model Tema {
-  id        Int      @id @default(autoincrement())
-  titulo    String
-  foroId    Int
-  usuarioId Int
-  creadoEn  DateTime @default(now())
-  posts     Post[]
-  foro      Foro     @relation(fields: [foroId], references: [id])
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  descripcion String?    // ✅ agregado
+  imagen      String?   // ✅ opcional
+  foroId      Int
+  usuarioId   Int
+  creadoEn    DateTime @default(now())
+  posts       Post[]
+  foro        Foro     @relation(fields: [foroId], references: [id])
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
 }
+
 
 model Post {
   id          Int          @id @default(autoincrement())

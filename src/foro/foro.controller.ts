@@ -47,6 +47,19 @@ export class ForoController {
 
     return this.foroService.createForo(body);
   }
+  @UseGuards(JwtAuthGuard)
+@Post(':id/eliminar')
+async eliminarForo(@Param('id') id: string, @Req() req: any) {
+  const usuario = await this.foroService.getUsuarioById(req.user.id);
+
+  if (!usuario || (usuario.rol !== 'moderador' && usuario.rol !== 'admin')) {
+    throw new UnauthorizedException('Solo los moderadores pueden eliminar foros');
+  }
+
+  return this.foroService.eliminarForo(Number(id));
+}
+
+  
 
   @UseGuards(JwtAuthGuard)
   @Get('perfil/:id')

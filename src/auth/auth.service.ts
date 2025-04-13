@@ -39,7 +39,7 @@ export class AuthService {
       id: usuario.id,
       email: usuario.email,
       rol: usuario.rol,
-      nombre: usuario.nombre, // 👈 AÑADE ESTO
+      nombre: usuario.nombre,
     });
     
     

@@ -5,15 +5,18 @@ import { PrismaService } from '../prisma/prisma.service';
 export class TemaService {
   constructor(private prisma: PrismaService) {}
 
-  async crearTema(foroId: number, usuarioId: number, titulo: string) {
+  async crearTema(foroId: number, usuarioId: number, titulo: string, descripcion: string, imagen?: string) {
     return this.prisma.tema.create({
       data: {
         foroId,
         usuarioId,
         titulo,
+        descripcion,
+        imagen, // campo opcional en tu modelo
       },
     });
   }
+  
 
   async obtenerPostsPorTema(temaId: number) {
     return this.prisma.post.findMany({
